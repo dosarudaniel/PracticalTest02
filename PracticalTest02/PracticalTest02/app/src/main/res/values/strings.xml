@@ -10,11 +10,8 @@
     <string name="information_type">Information Type</string>
     <string name="get_weather_forecast">Get Weather Forecast</string>
     <string-array name="information_types">
-        <item>temperature</item>
-        <item>wind_speed</item>
-        <item>condition</item>
-        <item>pressure</item>
-        <item>humidity</item>
-        <item>all</item>
+        <item>set</item>
+        <item>reset</item>
+        <item>poll</item>
     </string-array>
 </resources>

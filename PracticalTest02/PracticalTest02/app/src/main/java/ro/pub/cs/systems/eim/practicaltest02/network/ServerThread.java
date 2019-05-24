@@ -9,14 +9,16 @@ import java.util.HashMap;
 
 import cz.msebera.android.httpclient.client.ClientProtocolException;
 import ro.pub.cs.systems.eim.practicaltest02.general.Constants;
-import ro.pub.cs.systems.eim.practicaltest02.model.WeatherForecastInformation;
+import ro.pub.cs.systems.eim.practicaltest02.model.Alarm;
 
 public class ServerThread extends Thread {
 
     private int port = 0;
     private ServerSocket serverSocket = null;
 
-    private HashMap<String, WeatherForecastInformation> data = null;
+
+    // ip <-> alarm
+    private HashMap<String, Alarm> data = null;
 
     public ServerThread(int port) {
         this.port = port;
@@ -47,12 +49,16 @@ public class ServerThread extends Thread {
         return serverSocket;
     }
 
-    public synchronized void setData(String city, WeatherForecastInformation weatherForecastInformation) {
-        this.data.put(city, weatherForecastInformation);
+    public synchronized void setData(String IP, Alarm alarm) {
+        this.data.put(IP, alarm);
     }
 
-    public synchronized HashMap<String, WeatherForecastInformation> getData() {
+    public synchronized HashMap<String, Alarm> getData() {
         return data;
+    }
+
+    public synchronized void removeAlarm(String addr) {
+        data.remove(addr);
     }
 
     @Override
@@ -62,6 +68,7 @@ public class ServerThread extends Thread {
                 Log.i(Constants.TAG, "[SERVER THREAD] Waiting for a client invocation...");
                 Socket socket = serverSocket.accept();
                 Log.i(Constants.TAG, "[SERVER THREAD] A connection request was received from " + socket.getInetAddress() + ":" + socket.getLocalPort());
+
                 CommunicationThread communicationThread = new CommunicationThread(this, socket);
                 communicationThread.start();
             }
